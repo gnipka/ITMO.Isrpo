@@ -1,0 +1,160 @@
+openapi: 3.0.3
+info:
+  title: Расписание тренировок
+  version: 0.0.1
+  description: >
+    This is a sample Workout Schedule Service based on the OpenAPI 3.0 specification.
+
+tags:
+  - name: WorkoutController
+
+paths:
+
+  /workout:
+    post:
+      tags:
+        - WorkoutController
+      description: Add new workout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workout'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'          
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+
+    put:
+      tags:
+        - WorkoutController
+      description: Update an existing workout by Id
+      requestBody:
+        description: Update an existing workout
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workout'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Workout'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Workout'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Workout not found
+        '422':
+          description: Validation exception
+                  
+  /workout/{workoutId}:
+    get:
+      tags:
+        - WorkoutController
+      description: Get workout by Id
+      parameters:
+        - name: workoutId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Workout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'
+                
+    delete:
+      tags:
+        - WorkoutController
+      description: Delete workout by Id
+      parameters:
+        - name: workoutId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Workout is deleted"
+        "500":
+          description: "Error"
+  
+  /workouts:
+    get:
+      tags:
+        - WorkoutController
+      description: Get all workouts
+      responses:
+        '200':
+          description: List of workouts
+          content: 
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Workout'
+                  
+  /workouts/{coach}:
+    get:
+      tags:
+        - WorkoutController
+      description: Get workouts by coach
+      parameters:
+        - name: coach
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of workouts
+          content: 
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Workout'
+                
+components:
+  schemas:
+    Workout:
+      type: object
+      required:
+        - id
+        - name
+        - date
+        - during
+        - coach
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        date:
+          type: string
+          format: date
+        during:
+          type: integer
+        coach:
+          type: string
+  
