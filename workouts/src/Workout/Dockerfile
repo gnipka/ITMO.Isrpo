@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:7.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 WORKDIR /app
 
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
@@ -12,8 +12,8 @@ COPY . ./
 RUN dotnet publish -c Release -o out
 
 # build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:7.0
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-ENTRYPOINT ["dotnet", "IO.Swagger.dll"]
+ENTRYPOINT ["dotnet", "Workout.dll"]

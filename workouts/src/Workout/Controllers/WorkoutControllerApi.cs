@@ -11,12 +11,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using IO.Swagger.Attributes;
-using IO.Swagger.Models;
+using Workout.Models;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Workout.Attributes;
 
-namespace IO.Swagger.Controllers
+namespace Workout.Controllers
 { 
     /// <summary>
     /// 
@@ -24,7 +24,7 @@ namespace IO.Swagger.Controllers
     [ApiController]
     public class WorkoutControllerApiController : ControllerBase
     {
-        public static IEnumerable<Workout> Workouts { get; set; } = new List<Workout>();
+        public static IEnumerable<Models.Workout> Workouts { get; set; } = new List<Models.Workout>();
         
         /// <summary>
         /// 
@@ -36,8 +36,8 @@ namespace IO.Swagger.Controllers
         [Route("/workout")]
         [ValidateModelState]
         [SwaggerOperation("WorkoutPost")]
-        [SwaggerResponse(statusCode: 200, type: typeof(Workout), description: "Successful operation")]
-        public virtual IActionResult WorkoutPost([FromBody]Workout body)
+        [SwaggerResponse(statusCode: 200, type: typeof(Models.Workout), description: "Successful operation")]
+        public virtual IActionResult WorkoutPost([FromBody]Models.Workout body)
         {
             Workouts = Workouts.Append(body);
             return Ok();
@@ -54,8 +54,8 @@ namespace IO.Swagger.Controllers
         [Route("/workout")]
         [ValidateModelState]
         [SwaggerOperation("WorkoutPut")]
-        [SwaggerResponse(statusCode: 200, type: typeof(Workout), description: "Successful operation")]
-        public virtual IActionResult WorkoutPut([FromBody]Workout body)
+        [SwaggerResponse(statusCode: 200, type: typeof(Models.Workout), description: "Successful operation")]
+        public virtual IActionResult WorkoutPut([FromBody]Models.Workout body)
         {
             var workout = Workouts.FirstOrDefault(x => x.Id == body.Id);
 
@@ -109,7 +109,7 @@ namespace IO.Swagger.Controllers
         [Route("/workout/{workoutId}")]
         [ValidateModelState]
         [SwaggerOperation("WorkoutWorkoutIdGet")]
-        [SwaggerResponse(statusCode: 200, type: typeof(Workout), description: "Workout")]
+        [SwaggerResponse(statusCode: 200, type: typeof(Models.Workout), description: "Workout")]
         public virtual IActionResult WorkoutWorkoutIdGet([FromRoute][Required]int? workoutId)
         { 
             var workout = Workouts.FirstOrDefault(x => x.Id == workoutId);
@@ -132,7 +132,7 @@ namespace IO.Swagger.Controllers
         [Route("/workouts/{coach}")]
         [ValidateModelState]
         [SwaggerOperation("WorkoutsCoachGet")]
-        [SwaggerResponse(statusCode: 200, type: typeof(List<Workout>), description: "List of workouts")]
+        [SwaggerResponse(statusCode: 200, type: typeof(List<Models.Workout>), description: "List of workouts")]
         public virtual IActionResult WorkoutsCoachGet([FromRoute][Required]string coach)
         {
             var workouts = Workouts.Where(x => x.Coach == coach);
@@ -149,7 +149,7 @@ namespace IO.Swagger.Controllers
         [Route("/workouts")]
         [ValidateModelState]
         [SwaggerOperation("WorkoutsGet")]
-        [SwaggerResponse(statusCode: 200, type: typeof(List<Workout>), description: "List of workouts")]
+        [SwaggerResponse(statusCode: 200, type: typeof(List<Models.Workout>), description: "List of workouts")]
         public virtual IActionResult WorkoutsGet()
         {
             return Ok(Workouts);

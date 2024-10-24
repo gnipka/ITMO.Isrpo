@@ -9,6 +9,7 @@
  */
 using System;
 using System.IO;
+using Workout.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,11 +22,13 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using IO.Swagger.Filters;
-using IO.Swagger.Models;
+using Workout.Models;
+using Prometheus;
+using Workout.Filters;
+using Workout.Middlewares;
 
 
-namespace IO.Swagger
+namespace Workout
 {
     /// <summary>
     /// Startup
@@ -90,6 +93,8 @@ namespace IO.Swagger
                     // Use [ValidateModelState] on Actions to actually validate it in C# as well!
                     c.OperationFilter<GeneratePathParamsValidationFilter>();
                 });
+
+            services.AddMetrics();
         }
 
         /// <summary>
@@ -100,6 +105,9 @@ namespace IO.Swagger
         /// <param name="loggerFactory"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseMetricServer();
+            app.UseMiddleware<ResponseMetricMiddleware>();
+            app.UseHttpMetrics(); 
             app.UseRouting();
 
             //TODO: Uncomment this if you need wwwroot folder
@@ -123,8 +131,9 @@ namespace IO.Swagger
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapMetrics();
             });
-
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

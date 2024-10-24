@@ -5,10 +5,14 @@
     <TargetFramework>net7.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>IO.Swagger</AssemblyName>
-    <PackageId>IO.Swagger</PackageId>
+    <PackageId>Workout</PackageId>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <AspNetCoreModuleName>AspNetCoreModuleV2</AspNetCoreModuleName>
+    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
+    <PackageReference Include="prometheus-net.SystemMetrics" Version="3.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0"/>
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0"/>
