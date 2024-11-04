@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ "master" ]
 
-env:
-  image: '${{ secrets.DOCKER_HUB_USERNAME }}/workout'
-
 jobs:
   build:
 
@@ -25,4 +22,4 @@ jobs:
     - name: Build
       run: cd workouts/src/Workout && dotnet build --no-restore
     - name: Test
-      run: cd workouts/src/Workout && dotnet test --no-build --verbosity normald
+      run: cd workouts/src/Workout && dotnet test --no-build --verbosity normal
