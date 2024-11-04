@@ -20,6 +20,6 @@ jobs:
     - name: Restore dependencies
       run: cd workouts/src/Workout && dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: cd workouts/src/Workout dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: cd workouts/src/Workout dotnet test --no-build --verbosity normal
