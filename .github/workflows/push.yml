@@ -15,7 +15,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         password: ${{ secrets.SSH_KEY }}
         port: 49478
-        script: 
+        script: |
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/workout:latest
           docker stop workout || true
           docker rm workout || true
