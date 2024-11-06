@@ -73,7 +73,7 @@ namespace Workout
                 .ConfigureResource(resources => resources.AddService("workout"))
                 .WithTracing(tr => tr
                     .AddAspNetCoreInstrumentation()
-                    .AddZipkinExporter(o => new Uri("62c8d468f852.vps.myjino.ru:49190")));
+                    .AddZipkinExporter(o => new Uri("http://62c8d468f852.vps.myjino.ru:49190")));
             
             builder.Services.AddMetrics();
             
