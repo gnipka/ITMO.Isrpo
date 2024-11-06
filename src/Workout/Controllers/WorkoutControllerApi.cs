@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Workout.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using Workout.Attributes;
 
@@ -24,6 +25,12 @@ namespace Workout.Controllers
     [ApiController]
     public class WorkoutControllerApiController : ControllerBase
     {
+        private readonly ILogger<WorkoutControllerApiController> _logger;
+
+        public WorkoutControllerApiController(ILogger<WorkoutControllerApiController> logger)
+        {
+            _logger = logger;
+        }
         public static IEnumerable<Models.Workout> Workouts { get; set; } = new List<Models.Workout>();
         
         /// <summary>
@@ -40,6 +47,7 @@ namespace Workout.Controllers
         public virtual IActionResult WorkoutPost([FromBody]Models.Workout body)
         {
             Workouts = Workouts.Append(body);
+            _logger.LogInformation($"Тренировка {body.Id} добавлена в базу данных");
             return Ok();
         }
 
@@ -68,7 +76,7 @@ namespace Workout.Controllers
             workout.Date = body.Date;
             workout.During = body.During;
             workout.Coach = body.Coach;
-
+            _logger.LogInformation($"Обновлена информация о тренировке {body.Id}");
             return Ok();
         }
 
@@ -94,7 +102,8 @@ namespace Workout.Controllers
             }
 
             Workouts = Workouts.Where(x => x.Id != workoutId).ToList();
-
+            _logger.LogInformation($"Тренировка {workoutId} удалена из базы данных");
+            
             return Ok();
         }
 
@@ -118,7 +127,7 @@ namespace Workout.Controllers
             {
                 return NotFound();
             }
-
+            _logger.LogInformation($"Получена информация о тренировке {workoutId}");
             return Ok(workout);
         }
 
@@ -136,7 +145,8 @@ namespace Workout.Controllers
         public virtual IActionResult WorkoutsCoachGet([FromRoute][Required]string coach)
         {
             var workouts = Workouts.Where(x => x.Coach == coach);
-
+            
+            _logger.LogInformation($"Получена информация о тренировках тренера {coach}");
             return Ok(workouts);
         }
 
@@ -152,6 +162,7 @@ namespace Workout.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(List<Models.Workout>), description: "List of workouts")]
         public virtual IActionResult WorkoutsGet()
         {
+            _logger.LogInformation($"Получена информация о всех тренировках");
             return Ok(Workouts);
         }
     }
