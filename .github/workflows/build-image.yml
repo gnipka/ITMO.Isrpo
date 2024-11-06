@@ -15,7 +15,7 @@ jobs:
       steps:
       - uses: actions/checkout@v3
       - name: Create Docker Image
-        run: dotnet publish workouts/src/Workout/Workout.csproj /t:PublishContainer -r linux-x64
+        run: dotnet publish src/Workout/Workout.csproj /t:PublishContainer -r linux-x64
       
       - name: change image tag
         run: docker tag workout ${{ env.image }}

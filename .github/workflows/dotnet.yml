@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - name: Restore dependencies
-      run: cd workouts/src/Workout && dotnet restore
+      run: cd src/Workout && dotnet restore
     - name: Build
-      run: cd workouts/src/Workout && dotnet build --no-restore
+      run: cd src/Workout && dotnet build --no-restore
     - name: Test
-      run: cd workouts/src/Workout && dotnet test --no-build --verbosity normal
+      run: cd src/Workout && dotnet test --no-build --verbosity normal
