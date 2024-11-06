@@ -73,7 +73,7 @@ namespace Workout
                 .ConfigureResource(resources => resources.AddService("workout"))
                 .WithTracing(tr => tr
                     .AddAspNetCoreInstrumentation()
-                    .AddZipkinExporter(o => o.Endpoint = new Uri("http://127.0.0.1:9411")));
+                    .AddZipkinExporter(o => o.Endpoint = new Uri("http://localhost:9411")));
             
             builder.Services.AddMetrics();
             
