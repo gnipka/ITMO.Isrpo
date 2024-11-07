@@ -78,31 +78,10 @@ namespace Workout
                     .AddHttpClientInstrumentation()
                     .AddAspNetCoreInstrumentation()
                     .AddConsoleExporter()
-                    .AddOtlpExporter(options =>
+                    .AddZipkinExporter(o =>
                     {
-                        options.Endpoint = new Uri("http://62c8d468f852.vps.myjino.ru:9411/v2/spans");
-                        options.Protocol = OtlpExportProtocol.HttpProtobuf;
+                        o.Endpoint = new Uri("http://62c8d468f852.vps.myjino.ru:9411");
                     }));
-                    // .AddZipkinExporter(o =>
-                    // {
-                    //     o.Endpoint = new Uri("http://62c8d468f852.vps.myjino.ru:9411");
-                    //     o.ExportProcessorType = ExportProcessorType.Simple;
-                    //     o.HttpClientFactory = () =>
-                    //     {
-                    //         var handler = new HttpClientHandler
-                    //         {
-                    //             ServerCertificateCustomValidationCallback =
-                    //                 HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                    //         };
-                    //
-                    //         var httpClient = new HttpClient(handler)
-                    //         {
-                    //             Timeout = TimeSpan.FromSeconds(30)
-                    //         };
-                    //
-                    //         return httpClient;
-                    //     };
-                    // }));
             
             builder.Services.AddMetrics();
             
@@ -119,8 +98,6 @@ namespace Workout
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/0.0.1/swagger.json", "Расписание тренировок");
-
-                // c.SwaggerEndpoint("/swagger-original.json", "Расписание тренировок Original");
             });
             
             app.UseSerilogRequestLogging();
