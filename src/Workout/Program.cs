@@ -73,7 +73,7 @@ namespace Workout
                 .ConfigureResource(resources => resources.AddService("workout"))
                 .WithTracing(tr => tr
                     .AddAspNetCoreInstrumentation()
-                    .AddZipkinExporter(o => o.Endpoint = new Uri("http://62c8d468f852.vps.myjino.ru:9411")));
+                    .AddZipkinExporter(o => o.Endpoint = new Uri("http://host.docker.internal:9411")));
             
             builder.Services.AddMetrics();
             
