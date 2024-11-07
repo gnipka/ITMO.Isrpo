@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using OpenTelemetry;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Prometheus;
@@ -77,26 +78,31 @@ namespace Workout
                     .AddHttpClientInstrumentation()
                     .AddAspNetCoreInstrumentation()
                     .AddConsoleExporter()
-                    .AddZipkinExporter(o =>
+                    .AddOtlpExporter(options =>
                     {
-                        o.Endpoint = new Uri("http://62c8d468f852.vps.myjino.ru:9411");
-                        o.ExportProcessorType = ExportProcessorType.Simple;
-                        o.HttpClientFactory = () =>
-                        {
-                            var handler = new HttpClientHandler
-                            {
-                                ServerCertificateCustomValidationCallback =
-                                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                            };
-
-                            var httpClient = new HttpClient(handler)
-                            {
-                                Timeout = TimeSpan.FromSeconds(30)
-                            };
-
-                            return httpClient;
-                        };
+                        options.Endpoint = new Uri("http://62c8d468f852.vps.myjino.ru:9411/v2/spans");
+                        options.Protocol = OtlpExportProtocol.HttpProtobuf;
                     }));
+                    // .AddZipkinExporter(o =>
+                    // {
+                    //     o.Endpoint = new Uri("http://62c8d468f852.vps.myjino.ru:9411");
+                    //     o.ExportProcessorType = ExportProcessorType.Simple;
+                    //     o.HttpClientFactory = () =>
+                    //     {
+                    //         var handler = new HttpClientHandler
+                    //         {
+                    //             ServerCertificateCustomValidationCallback =
+                    //                 HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    //         };
+                    //
+                    //         var httpClient = new HttpClient(handler)
+                    //         {
+                    //             Timeout = TimeSpan.FromSeconds(30)
+                    //         };
+                    //
+                    //         return httpClient;
+                    //     };
+                    // }));
             
             builder.Services.AddMetrics();
             
