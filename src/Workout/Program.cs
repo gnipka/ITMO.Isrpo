@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net.Http;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Prometheus;
@@ -72,11 +74,29 @@ namespace Workout
             builder.Services.AddOpenTelemetry()
                 .ConfigureResource(resources => resources.AddService("workout"))
                 .WithTracing(tr => tr
-                    .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddAspNetCoreInstrumentation()
                     .AddConsoleExporter()
-                    .AddOtlpExporter(o => o.Endpoint = new Uri("http://62c8d468f852.vps.myjino.ru:9411")));
+                    .AddZipkinExporter(o =>
+                    {
+                        o.Endpoint = new Uri("http://62c8d468f852.vps.myjino.ru:9411");
+                        o.ExportProcessorType = ExportProcessorType.Simple;
+                        o.HttpClientFactory = () =>
+                        {
+                            var handler = new HttpClientHandler
+                            {
+                                ServerCertificateCustomValidationCallback =
+                                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                            };
+
+                            var httpClient = new HttpClient(handler)
+                            {
+                                Timeout = TimeSpan.FromSeconds(30)
+                            };
+
+                            return httpClient;
+                        };
+                    }));
             
             builder.Services.AddMetrics();
             
