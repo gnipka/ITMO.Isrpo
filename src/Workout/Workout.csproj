@@ -17,6 +17,7 @@
     <PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.9.0" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.9.0" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
     <PackageReference Include="prometheus-net.SystemMetrics" Version="3.1.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
