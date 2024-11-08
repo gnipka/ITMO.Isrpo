@@ -1,17 +1,13 @@
 using System;
 using System.IO;
-using System.Net.Http;
 using System.Reflection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using OpenTelemetry;
-using OpenTelemetry.Exporter;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Prometheus;
@@ -41,8 +37,8 @@ namespace Workout
             
             builder.Services.AddMvc(options =>
                 {
-                    options.InputFormatters.RemoveType<Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter>();
-                    options.OutputFormatters.RemoveType<Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonOutputFormatter>();
+                    options.InputFormatters.RemoveType<SystemTextJsonInputFormatter>();
+                    options.OutputFormatters.RemoveType<SystemTextJsonOutputFormatter>();
                 })
                 .AddNewtonsoftJson(opts =>
                 {
@@ -80,7 +76,7 @@ namespace Workout
                     .AddConsoleExporter()
                     .AddZipkinExporter(o =>
                     {
-                        o.Endpoint = new Uri("http://62c8d468f852.vps.myjino.ru:9411");
+                        o.Endpoint = new Uri("http://zipkin:9411");
                     }));
             
             builder.Services.AddMetrics();
