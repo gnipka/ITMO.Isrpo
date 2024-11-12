@@ -76,7 +76,7 @@ namespace Workout
                     .AddConsoleExporter()
                     .AddZipkinExporter(o =>
                     {
-                        o.Endpoint = new Uri("http://172.18.0.1:9411/api/v2/spans");
+                        o.Endpoint = new Uri("http://zipkin:9411/api/v2/spans");
                     }));
             
             builder.Services.AddMetrics();
